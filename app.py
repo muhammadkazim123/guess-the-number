@@ -1,36 +1,43 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-
-from main import (
-    generate_secret_number,
-    check_guess,
-    MAX_ATTEMPTS,
-    MIN_NUMBER,
-    MAX_NUMBER
-)
-
-app = Flask(__name__)
 
 import os
 
+from flask import Flask, render_template, request, redirect, url_for, session
+
+from main import (
+    MIN_NUMBER,
+    MAX_NUMBER,
+    MAX_ATTEMPTS,
+    generate_secret_number,
+    build_riddle,
+    analyse_riddle_guess,
+    check_guess,
+)
+
+app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "local-development-key")
 
 
 def start_new_round():
-    """Start a fresh game."""
+    secret_number = generate_secret_number()
 
-    session["secret_number"] = generate_secret_number()
+    session["secret_number"] = secret_number
+    session["riddle"] = build_riddle(secret_number)
     session["attempts_left"] = MAX_ATTEMPTS
     session["guesses_used"] = 0
     session["status"] = "playing"
-    session["message"] = "SYSTEM READY. ENTER YOUR FIRST GUESS."
+    session["message"] = "SYSTEM READY. STUDY THE CLUES AND FIND THE NUMBER."
     session["message_type"] = "neutral"
+    session["clue_feedback"] = []
+    session["last_guess"] = None
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
 
-    if "secret_number" not in session:
+    if "secret_number" not in session or "riddle" not in session:
         start_new_round()
+
+    anchor = "game"
 
     if request.method == "POST":
 
@@ -38,12 +45,15 @@ def home():
 
         if action == "restart":
             start_new_round()
+            anchor = "game"
 
         elif session["status"] != "playing":
             session["message"] = "ROUND COMPLETE. START A NEW ROUND."
             session["message_type"] = "warning"
 
         else:
+            anchor = "guess-form"
+
             raw_guess = request.form.get("guess", "").strip()
 
             try:
@@ -53,6 +63,14 @@ def home():
                     raise ValueError
 
                 session["guesses_used"] += 1
+                session["last_guess"] = guess
+
+                matched, total, feedback = analyse_riddle_guess(
+                    guess,
+                    session["riddle"]
+                )
+
+                session["clue_feedback"] = feedback
 
                 result = check_guess(
                     guess,
@@ -62,39 +80,58 @@ def home():
                 if result == "correct":
 
                     session["status"] = "won"
-                    session["message"] = "JACKPOT! YOU FOUND THE NUMBER."
+
+                    session["message"] = (
+                        f"JACKPOT! YOU FOUND {guess}. "
+                        f"YOU MATCHED ALL {total} CLUES."
+                    )
+
                     session["message_type"] = "good"
 
                 else:
 
                     session["attempts_left"] -= 1
 
+                    clue_summary = (
+                        f"Your guess matches {matched} of {total} clues."
+                    )
+
                     if session["attempts_left"] == 0:
 
                         session["status"] = "lost"
+
                         session["message"] = (
-                            "GAME OVER. THE NUMBER WAS "
-                            + str(session["secret_number"])
+                            f"GAME OVER. THE NUMBER WAS "
+                            f"{session['secret_number']}. {clue_summary}"
                         )
+
                         session["message_type"] = "bad"
 
                     elif result == "low":
 
-                        session["message"] = "TOO LOW. AIM HIGHER."
+                        session["message"] = (
+                            f"TOO LOW. AIM HIGHER. {clue_summary}"
+                        )
+
                         session["message_type"] = "neutral"
 
                     else:
 
-                        session["message"] = "TOO HIGH. AIM LOWER."
+                        session["message"] = (
+                            f"TOO HIGH. AIM LOWER. {clue_summary}"
+                        )
+
                         session["message_type"] = "neutral"
 
             except ValueError:
 
-                session["message"] = "INVALID INPUT. ENTER 1 TO 100."
+                session["message"] = (
+                    "INVALID INPUT. ENTER A WHOLE NUMBER FROM 1 TO 100."
+                )
+
                 session["message_type"] = "bad"
 
-        # Return the browser directly to the game panel
-        return redirect(url_for("home") + "#game")
+        return redirect(url_for("home") + f"#{anchor}")
 
     display_number = (
         session["secret_number"]
@@ -110,9 +147,12 @@ def home():
         max_attempts=MAX_ATTEMPTS,
         display_number=display_number,
         message=session["message"],
-        message_type=session["message_type"]
+        message_type=session["message_type"],
+        riddle=session["riddle"],
+        clue_feedback=session.get("clue_feedback", []),
+        last_guess=session.get("last_guess"),
     )
 
 
 if __name__ == "__main__":
-   app.run(debug=False)
+    app.run(debug=False)

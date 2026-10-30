@@ -1,27 +1,17 @@
 /* =====================================
-   NUMBER THEORY
-   Classic Arcade Game
+   NUMBER THEORY — ARCADE GAME
 ===================================== */
-
-
-/* COLOURS */
 
 :root {
     --background: #100e16;
     --cabinet: #24202b;
     --screen: #080f0e;
-
     --amber: #ffbd50;
     --cyan: #60e6d4;
-
     --white: #f2eee5;
     --muted: #aaa2a0;
-
     --cabinet-edge: #51434a;
 }
-
-
-/* GENERAL SETTINGS */
 
 * {
     margin: 0;
@@ -32,10 +22,8 @@
 body {
     min-height: 100vh;
     padding: 0 22px;
-
-    background-color: var(--background);
+    background: var(--background);
     color: var(--white);
-
     font-family: "Courier New", monospace;
 }
 
@@ -48,15 +36,11 @@ button {
     cursor: pointer;
 }
 
-
-/* PAGE WIDTH */
-
 .page {
     width: 100%;
     max-width: 680px;
     margin: 0 auto;
 }
-
 
 /* HEADER */
 
@@ -64,20 +48,19 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     padding: 28px 0 12px;
 }
 
 .brand {
     color: var(--white);
     text-decoration: none;
-
     font-size: 20px;
     font-weight: bold;
     letter-spacing: -1px;
 }
 
-.brand span {
+.brand span,
+.footer span {
     color: var(--amber);
 }
 
@@ -85,7 +68,6 @@ button {
     color: var(--muted);
     font-size: 10px;
 }
-
 
 /* INTRODUCTION */
 
@@ -95,7 +77,6 @@ button {
 
 .eyebrow {
     margin-bottom: 20px;
-
     color: var(--cyan);
     font-size: 11px;
     letter-spacing: 3px;
@@ -104,7 +85,6 @@ button {
 h1 {
     font-size: clamp(42px, 8vw, 68px);
     line-height: 1.05;
-
     font-weight: 900;
     letter-spacing: -3px;
 }
@@ -114,39 +94,30 @@ h1 span {
 }
 
 .intro-copy {
-    max-width: 410px;
+    max-width: 440px;
     margin-top: 20px;
-
     color: var(--muted);
     font-size: 13px;
     line-height: 1.8;
 }
 
-
-/* ARCADE CABINET */
+/* ARCADE MACHINE */
 
 .arcade-machine {
     padding: 23px;
-
-    background-color: var(--cabinet);
+    background: var(--cabinet);
     border: 3px solid var(--cabinet-edge);
     border-radius: 8px;
-
     box-shadow:
         0 9px 0 #07060a,
         0 13px 25px rgba(0, 0, 0, 0.35);
 }
 
-
-/* MACHINE HEADER */
-
 .machine-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     margin-bottom: 20px;
-
     font-size: 10px;
     letter-spacing: 2px;
 }
@@ -161,38 +132,29 @@ h1 span {
 
 .status-light {
     display: inline-block;
-
-    height: 7px;
     width: 7px;
-
+    height: 7px;
     margin-right: 6px;
-
-    background-color: var(--cyan);
+    background: var(--cyan);
     border-radius: 50%;
 }
-
 
 /* GAME SCREEN */
 
 .game-screen {
     padding: 22px 18px;
-
-    background-color: var(--screen);
-
+    background: var(--screen);
     border: 4px solid #705b3a;
     border-radius: 5px;
-
     box-shadow:
         inset 0 0 0 3px #030807,
         inset 0 0 25px rgba(0, 0, 0, 0.8);
-
     text-align: center;
 }
 
 .screen-info {
     display: flex;
     justify-content: space-between;
-
     color: #918c81;
     font-size: 9px;
     letter-spacing: 2px;
@@ -200,7 +162,6 @@ h1 span {
 
 .screen-prompt {
     margin-top: 40px;
-
     color: var(--cyan);
     font-size: 10px;
     letter-spacing: 3px;
@@ -208,48 +169,38 @@ h1 span {
 
 .number-display {
     margin: 12px 0;
-
     color: var(--amber);
-
     font-size: clamp(65px, 12vw, 95px);
     font-weight: bold;
     line-height: 1.3;
-
     text-shadow: 4px 4px #61401e;
 }
 
 .screen-caption {
     margin-bottom: 20px;
-
     color: var(--cyan);
     font-size: 10px;
     letter-spacing: 2px;
 }
-
 
 /* GAME STATISTICS */
 
 .game-stats {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-
     gap: 12px;
     margin-top: 20px;
 }
 
 .stat {
     padding: 15px;
-
-    background-color: #17141e;
-
+    background: #17141e;
     text-align: center;
 }
 
 .stat span {
     display: block;
-
     margin-bottom: 8px;
-
     color: var(--muted);
     font-size: 9px;
     letter-spacing: 1px;
@@ -260,13 +211,11 @@ h1 span {
     font-size: 22px;
 }
 
-
-/* ATTEMPT INDICATORS */
+/* ATTEMPTS */
 
 .attempts {
     display: flex;
     gap: 8px;
-
     margin-top: 18px;
 }
 
@@ -276,24 +225,122 @@ h1 span {
 }
 
 .attempt-block.active {
-    background-color: var(--cyan);
+    background: var(--cyan);
 }
 
 .attempt-block.used {
-    background-color: #47404a;
+    background: #47404a;
 }
 
+/* MATHEMATICAL CLUES */
 
-/* GAME FEEDBACK */
+.riddle-panel {
+    margin-top: 23px;
+    padding: 19px;
+    background: #17141e;
+    border: 1px solid #51434a;
+    border-left: 3px solid var(--cyan);
+}
+
+.riddle-heading {
+    margin-bottom: 13px;
+}
+
+.eyebrow-small {
+    color: var(--cyan);
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+.riddle-heading h2,
+.feedback-panel h2 {
+    margin-top: 7px;
+    color: var(--amber);
+    font-size: 17px;
+    letter-spacing: 1px;
+}
+
+.clue-list {
+    padding-left: 22px;
+    color: var(--white);
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+.clue-list li {
+    padding-left: 5px;
+}
+
+.clue-list li::marker {
+    color: var(--cyan);
+}
+
+.clue-note {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+/* CLUE FEEDBACK */
+
+.feedback-panel {
+    margin-top: 18px;
+    padding: 18px;
+    background: #111018;
+    border: 1px solid #51434a;
+}
+
+.feedback-panel h2 {
+    margin: 0 0 13px;
+}
+
+.feedback-list {
+    display: grid;
+    gap: 10px;
+    list-style: none;
+}
+
+.feedback-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.feedback-symbol {
+    flex: 0 0 18px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.feedback-list strong,
+.feedback-list small {
+    display: block;
+}
+
+.feedback-list small {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.feedback-list .matched .feedback-symbol {
+    color: var(--cyan);
+}
+
+.feedback-list .not-matched .feedback-symbol {
+    color: #ff7777;
+}
+
+/* GAME MESSAGE */
 
 .game-message {
     margin-top: 20px;
     padding: 15px 12px;
-
-    background-color: #15131b;
-
+    background: #15131b;
     border-left: 3px solid var(--amber);
-
     color: var(--amber);
     font-size: 11px;
     line-height: 1.6;
@@ -315,8 +362,7 @@ h1 span {
     color: var(--amber);
 }
 
-
-/* GUESS FORM */
+/* GUESS INPUT */
 
 .guess-form {
     margin-top: 24px;
@@ -325,7 +371,6 @@ h1 span {
 .guess-form label {
     display: block;
     margin-bottom: 11px;
-
     color: var(--muted);
     font-size: 10px;
     letter-spacing: 2px;
@@ -339,17 +384,12 @@ h1 span {
 .guess-controls input {
     flex: 1;
     min-width: 0;
-
     height: 54px;
     padding: 0 15px;
-
-    background-color: #100e16;
-
+    background: #100e16;
     border: 2px solid #61513e;
     border-radius: 3px;
-
     color: var(--amber);
-
     font-size: 20px;
     outline: none;
 }
@@ -364,26 +404,21 @@ h1 span {
 
 .guess-controls button {
     width: 125px;
-
-    background-color: var(--amber);
+    background: var(--amber);
     border: none;
     border-radius: 3px;
-
     color: #211709;
-
     font-size: 12px;
     font-weight: bold;
     letter-spacing: 2px;
-
     box-shadow: 0 4px 0 #80551e;
-
     transition:
         background-color 0.15s ease,
         transform 0.15s ease;
 }
 
 .guess-controls button:hover:not(:disabled) {
-    background-color: var(--cyan);
+    background: var(--cyan);
     transform: translateY(-2px);
 }
 
@@ -392,7 +427,6 @@ h1 span {
     cursor: not-allowed;
     box-shadow: none;
 }
-
 
 /* RESTART BUTTON */
 
@@ -403,17 +437,12 @@ h1 span {
 .restart-button {
     width: 100%;
     padding: 13px;
-
-    background-color: transparent;
-
+    background: transparent;
     border: 1px solid #62514a;
     border-radius: 3px;
-
     color: var(--white);
-
     font-size: 10px;
     letter-spacing: 2px;
-
     transition:
         color 0.15s ease,
         border-color 0.15s ease;
@@ -424,37 +453,27 @@ h1 span {
     border-color: var(--amber);
 }
 
-
-/* INSTRUCTIONS */
+/* INSTRUCTIONS AND FOOTER */
 
 .instructions {
     max-width: 480px;
     margin: 24px auto 2px;
-
     color: var(--muted);
-
     font-size: 11px;
     line-height: 1.8;
     text-align: center;
 }
 
-
-/* FOOTER */
-
 .footer {
     padding: 25px 0 30px;
-
     color: var(--muted);
-
     font-size: 10px;
     text-align: center;
 }
 
 .footer span {
     padding: 0 5px;
-    color: var(--amber);
 }
-
 
 /* MOBILE RESPONSIVENESS */
 
@@ -505,6 +524,11 @@ h1 span {
 
     .guess-controls button {
         width: 100px;
+    }
+
+    .riddle-panel,
+    .feedback-panel {
+        padding: 14px;
     }
 
     .footer {

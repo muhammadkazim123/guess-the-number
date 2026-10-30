@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,8 +8,10 @@
 
     <title>Number Theory — Arcade Game</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
 </head>
 
 <body>
@@ -16,6 +19,7 @@
     <div class="page">
 
         <header class="topbar">
+
             <a href="/" class="brand">
                 number theory<span>.</span>
             </a>
@@ -23,14 +27,16 @@
             <p class="event-note">
                 Made for World Coding Day
             </p>
-        </header>
 
+        </header>
 
         <main>
 
             <section class="introduction">
 
-                <p class="eyebrow">A CLASSIC NUMBER GAME</p>
+                <p class="eyebrow">
+                    A CLASSIC NUMBER GAME — WITH A TWIST
+                </p>
 
                 <h1>
                     Can you find<br>
@@ -38,13 +44,12 @@
                 </h1>
 
                 <p class="intro-copy">
-                    The machine has picked a secret number.
-                    You've got seven chances to figure it out.
-                    Make every guess count.
+                    The machine has picked a secret number from 1 to 100.
+                    Use the mathematical clues, think logically, and find it
+                    in five chances.
                 </p>
 
             </section>
-
 
             <section class="arcade-machine" id="game">
 
@@ -55,6 +60,7 @@
                     </span>
 
                     <span class="machine-status">
+
                         <span class="status-light"></span>
 
                         {% if status == "playing" %}
@@ -62,16 +68,18 @@
                         {% else %}
                             ROUND FINISHED
                         {% endif %}
+
                     </span>
 
                 </div>
 
-
                 <div class="game-screen">
 
                     <div class="screen-info">
+
                         <span>NUMBER RANGE</span>
                         <span>1 — 100</span>
+
                     </div>
 
                     <p class="screen-prompt">
@@ -85,32 +93,46 @@
                     <p class="screen-caption">
 
                         {% if status == "playing" %}
-                            FIND THE NUMBER TO WIN
+
+                            USE THE CLUES TO FIND THE NUMBER
+
                         {% elif status == "won" %}
+
                             YOU BEAT THE MACHINE!
+
                         {% else %}
+
                             GAME OVER
+
                         {% endif %}
 
                     </p>
 
                 </div>
 
-
                 <div class="game-stats">
 
                     <div class="stat">
+
                         <span>ATTEMPTS LEFT</span>
-                        <strong>{{ attempts_left }}</strong>
+
+                        <strong>
+                            {{ attempts_left }}
+                        </strong>
+
                     </div>
 
                     <div class="stat">
+
                         <span>GUESSES MADE</span>
-                        <strong>{{ guesses_used }}</strong>
+
+                        <strong>
+                            {{ guesses_used }}
+                        </strong>
+
                     </div>
 
                 </div>
-
 
                 <div class="attempts">
 
@@ -121,24 +143,114 @@
                                 active
                             {% else %}
                                 used
-                            {% endif %}">
-                        </span>
+                            {% endif %}
+                        "></span>
 
                     {% endfor %}
 
                 </div>
 
+                <section class="riddle-panel">
 
-                <div class="game-message message-{{ message_type }}"
-                     role="status"
-                     aria-live="polite">
+                    <div class="riddle-heading">
 
+                        <span class="eyebrow-small">
+                            THINK IT THROUGH
+                        </span>
+
+                        <h2>
+                            Mathematical clues
+                        </h2>
+
+                    </div>
+
+                    <ol class="clue-list">
+
+                        {% for clue in riddle %}
+
+                            <li>
+                                {{ clue.text }}
+                            </li>
+
+                        {% endfor %}
+
+                    </ol>
+
+                    <p class="clue-note">
+                        Every clue describes the same secret number.
+                    </p>
+
+                </section>
+
+                {% if clue_feedback %}
+
+                    <section class="feedback-panel">
+
+                        <h2>
+                            Clue analysis
+
+                            {% if last_guess is not none %}
+                                for {{ last_guess }}
+                            {% endif %}
+
+                        </h2>
+
+                        <ul class="feedback-list">
+
+                            {% for item in clue_feedback %}
+
+                                <li class="{% if item.matched %}
+                                    matched
+                                {% else %}
+                                    not-matched
+                                {% endif %}">
+
+                                    <span class="feedback-symbol">
+
+                                        {% if item.matched %}
+                                            ✓
+                                        {% else %}
+                                            ×
+                                        {% endif %}
+
+                                    </span>
+
+                                    <span>
+
+                                        <strong>
+                                            {{ item.text }}
+                                        </strong>
+
+                                        <small>
+                                            {{ item.message }}
+                                        </small>
+
+                                    </span>
+
+                                </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </section>
+
+                {% endif %}
+
+                <div
+                    class="game-message message-{{ message_type }}"
+                    role="status"
+                    aria-live="polite"
+                >
                     {{ message }}
-
                 </div>
 
-
-                <form method="POST" class="guess-form">
+                <form
+                    method="POST"
+                    class="guess-form"
+                    id="guess-form"
+                    style="scroll-margin-top: 120px;"
+                >
 
                     <label for="guess">
                         YOUR NEXT GUESS
@@ -173,7 +285,6 @@
 
                 </form>
 
-
                 <form method="POST" class="restart-form">
 
                     <button
@@ -187,13 +298,12 @@
 
                 </form>
 
-
                 <div class="instructions">
 
                     <p>
-                        Pick a number between 1 and 100.
-                        The machine will tell you whether
-                        your guess is too high or too low.
+                        Pick a number between 1 and 100. Read every clue,
+                        enter your guess, and use the clue analysis together
+                        with the higher/lower hint to narrow it down.
                     </p>
 
                 </div>
@@ -201,7 +311,6 @@
             </section>
 
         </main>
-
 
         <footer class="footer">
 
@@ -216,4 +325,5 @@
     </div>
 
 </body>
+
 </html>
